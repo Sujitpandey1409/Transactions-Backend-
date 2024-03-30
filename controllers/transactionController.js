@@ -11,13 +11,13 @@ const performTransaction = async(req,res)=>{
         if(Number(lenderUser.balance)<Number(balance)){return res.status(400).json('bad luck!"insufficient balance"')}
         lenderUser.balance = String(Number(lenderUser.balance)+Number(balance))
         borrowerUser.balance = String(Number(borrowerUser.balance)-Number(balance))
-        console.log(lenderUser.balance, borrowerUser.balance);
+        console.log('balance',balance,'lenderUser.balance:',lenderUser.balance, borrowerUser.balance);
         
         await lenderUser.save()
         await borrowerUser.save()
         await Transactions.create({author:lenderId,name:lenderUser.name,email:lenderUser.email,balance:`-${balance}`})
         await Transactions.create({author:borrowerId,name:borrowerUser.name,email:borrowerUser.email,balance:`+${balance}`})
-        res.status(400).json("Transaction successful")
+        res.status(200).json("Transaction successful")
     } catch (error) {
         console.log(error);
         res.status(500).json(error)
